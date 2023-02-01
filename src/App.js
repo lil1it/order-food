@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Basket from "./components/basket/Basket";
+import Header from "./components/header/Header";
+import Meals from "./components/meals/Meals";
+import Summary from "./components/summary/Summary";
+import { BasketProvider } from "./store/BasketContext";
+import styled from "styled-components";
 
 function App() {
+  const [isBasketVisible, setBasketVisible] = useState(false);
+
+  const showBasketHandler = () => {
+    setBasketVisible((prevState) => !prevState);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BasketProvider>
+      <Header onShowBasket={showBasketHandler}></Header>
+      <Content>
+        <Summary />
+        <Meals /> {isBasketVisible && <Basket onClose={showBasketHandler} />}
+      </Content>
+    </BasketProvider>
   );
 }
 
 export default App;
+
+const Content = styled.div`
+  margin-top: 101px;
+`;
